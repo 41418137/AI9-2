@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<title>ch9-2使用CSS製作多層級選單(2) - AI增強版</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.menu {
+    font-family: '標楷體', 'DFKai-SB', serif; /* [修改] 增加通用標楷體備援字型，確保跨平台顯示一致 */
+    font-size: 20px;
+}
+.menu > li { /* 子選擇器，只有第一層 */
+    float: left;
+    margin-right: 4px; /* [新增] 第一層選單項目間加入微距，讓 5% 圓角與 2px 框線更清晰 */
+}
+.menu li {
+    position: relative;
+    padding: 0px;
+    border: 2px solid #2b6cb0; /* [修改] 原為 lightblue 1px dashed，改為 2px 實線並採用與淺藍背景同色系之加深藍色 */
+    border-radius: 5%; /* [新增] 設定選單項目外框具有 5% 圓角 */
+    min-width: 120px;
+    box-sizing: border-box; /* [新增] 讓 2px 框線納入寬度計算，避免版面位移 */
+    transition: border-color 0.2s ease; /* [新增] 滑鼠移入時框線顏色平滑過渡 */
+}
+.menu li:hover {
+    border-color: #163e63; /* [新增] 滑鼠移入選單項目時，框線同步切換為更深的同色系藍，呼應 hover 背景 */
+}
+.menu ul {
+    position: absolute;
+    z-index: 10;
+    top: 105%; /* [修改] 原為 top: 100%，改為 105% 使第一層子選單於上層選單下方 5% 處開始顯示 */
+    left: 5%; /* [新增] 使第一層子選單於上層選單右側 5% 處開始顯示（與 top: 105% 搭配呈現右下方各 5% 偏移） */
+    display: none; /* 預設 ul 不顯示 */
+}
+.menu > li > ul::before {
+    /* [新增] 在主選單與第一層子選單的 5% 垂直間距建立透明感應橋接區，避免滑鼠移入子選單時中斷 hover */
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 12px;
+}
+.menu ul li {
+    margin-bottom: 2px; /* [新增] 子選單各項目間保留 2px 間距，讓每個項目的 5% 圓角與框線分明 */
+}
+.menu ul li > ul { /* 定義上一層 ul li 與下一層 ul 的距離 */
+    z-index: 20;
+    top: 5%; /* [保留] 第二層子選單自上層項目下方 5% 處開始顯示 */
+    left: 105%; /* [修改] 原為 left: 95%，改為 105% 使子選單自上層項目右側 5% 處開始顯示 */
+}
+.menu ul li > ul::before {
+    /* [新增] 在第一層與第二層子選單的 5% 水平間距建立透明感應橋接區，避免滑鼠移往右側子選單時中斷 hover */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -12px;
+    width: 14px;
+    bottom: 0;
+}
+.menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    background-color: #cfe8f7; /* [新增] 淺藍色備援背景，當外部圖片 img/btn1.png 尚未載入時仍能呈現同色系外觀 */
+    background-image: url(img/btn1.png);
+    background-size: cover;
+    color: black;
+    border-radius: 5%; /* [新增] 同步設定超連結背景為 5% 圓角，避免背景超出外框圓角（且不對 li 使用 overflow:hidden 以免裁切子選單） */
+    transition: background-color 0.2s ease, color 0.2s ease; /* [新增] 滑鼠移入時背景與文字顏色平滑過渡 */
+}
+.menu a:hover {
+    background-color: #2b6cb0; /* [新增] 滑鼠移入時的深藍色備援背景，與 2px 加深框線形成同色系搭配 */
+    background-image: url(img/btn2.png);
+    background-size: cover;
+    color: white;
+}
+.menu li:hover > ul {
+    display: block; /* 移動到 li，li 下一層的 ul 才顯示 */
+}
+</style>
+</head>
+<body>
+<ul class="menu">
+    <li><a href="#">台北景點</a>
+        <ul>
+            <li><a href="#">台北101</a></li>
+            <li><a href="#">迪化街</a></li>
+            <li><a href="#">士林夜市</a></li>
+        </ul>
+    </li>
+    <li><a href="#">澎湖景點</a>
+        <ul>
+            <li><a href="#">跨海大橋</a></li>
+            <li><a href="#">沙灘</a></li>
+            <li><a href="#">觀音亭</a></li>
+        </ul>
+    </li>
+    <li><a href="#">台南景點</a>
+        <ul>
+            <li><a href="#">赤崁樓</a></li>
+            <li><a href="#">台南孔廟</a></li>
+            <li><a href="#">台南小吃&gt;&gt;</a>
+                <ul>
+                    <li><a href="#">八寶冰</a></li>
+                    <li><a href="#">蚵仔煎</a></li>
+                    <li><a href="#">米糕</a></li>
+                    <li><a href="#">牛肉湯</a></li>
+                    <li><a href="#">肉燥飯</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</body>
+</html>
